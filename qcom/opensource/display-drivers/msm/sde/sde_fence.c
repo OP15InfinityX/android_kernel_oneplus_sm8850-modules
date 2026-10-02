@@ -886,6 +886,13 @@ void sde_fence_dump(struct dma_fence *fence)
 	char timeline_str[TIMELINE_VAL_LENGTH];
 	uint32_t i;
 
+#ifdef OPLUS_FEATURE_DISPLAY
+	if (!fence || !fence->ops) {
+		SDE_ERROR("fence or fence->ops is NULL\n");
+		return;
+	}
+#endif
+
 	if (fence->ops->timeline_value_str)
 		fence->ops->timeline_value_str(fence, timeline_str, TIMELINE_VAL_LENGTH);
 
@@ -903,8 +910,21 @@ void sde_fence_dump(struct dma_fence *fence)
 		array = container_of(fence, struct dma_fence_array, base);
 		SDE_ERROR("fence drv name:%s num_fences:%d\n", fence->ops->get_driver_name(fence),
 			array->num_fences);
-		for (i = 0; i < array->num_fences; i++)
+#ifdef OPLUS_FEATURE_DISPLAY
+		if (!array || !array->fences) {
+			SDE_ERROR("invalid array fence\n");
+			return;
+		}
+#endif
+		for (i = 0; i < array->num_fences; i++) {
+#ifdef OPLUS_FEATURE_DISPLAY
+			if (!array->fences[i]) {
+				SDE_ERROR("child fence %d is NULL\n", i);
+				continue;
+			}
+#endif
 			sde_fence_dump(array->fences[i]);
+		}
 	}
 }
 
