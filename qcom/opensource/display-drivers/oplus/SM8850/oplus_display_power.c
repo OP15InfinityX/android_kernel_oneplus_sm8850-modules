@@ -296,7 +296,8 @@ int oplus_display_panel_get_power_status(void *data) {
 		return -EINVAL;
 	}
 
-	OPLUS_DSI_INFO("oplus_display_get_power_status = %d\n", display->panel->power_mode);
+	/* This getter is polled; keep normal reads out of the kernel ring buffer. */
+	pr_debug("%s: power_mode = %d\n", __func__, display->panel->power_mode);
 	(*power_status) = display->panel->power_mode;
 
 	return 0;

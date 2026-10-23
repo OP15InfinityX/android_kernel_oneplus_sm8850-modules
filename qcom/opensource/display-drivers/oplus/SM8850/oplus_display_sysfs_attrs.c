@@ -989,7 +989,8 @@ static ssize_t oplus_display_get_power_status(struct kobject *obj,
 		return -EINVAL;
 	}
 
-	OPLUS_DSI_INFO("oplus_display_get_power_status = %d\n", display->panel->power_mode);
+	/* This getter is polled; keep normal reads out of the kernel ring buffer. */
+	pr_debug("%s: power_mode = %d\n", __func__, display->panel->power_mode);
 
 	return sysfs_emit(buf, "kernel power :%d\n", display->panel->power_mode);
 }

@@ -4804,7 +4804,7 @@ ssize_t oplus_adfr_get_min_fps_attr(struct kobject *obj,
 	h_skew = display->panel->cur_mode->timing.h_skew;
 	if (h_skew == STANDARD_ADFR || h_skew == STANDARD_MFR) {
 		minfps = p_oplus_adfr_params->sa_min_fps;
-		ADFR_INFO("oplus_adfr_sa_min_fps:%u\n", minfps);
+		ADFR_DEBUG("oplus_adfr_sa_min_fps:%u\n", minfps);
 	} else {
 		ADFR_INFO("not for OA minfps get, because of more complex processes, to be improved");
 	}
